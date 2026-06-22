@@ -39,6 +39,8 @@ public abstract class MixinAdvancementsScreen extends Screen implements ClientAd
     private void renderProgress(GuiGraphicsExtractor graphics, int xo, int yo, int mouseX, int mouseY, CallbackInfo ci){
         if(this.selectedTab == null) return;
 
+        if(ClientAdvancementProgress.getInstance().getTotalAdvancements().isEmpty()) return;
+
         Component progressComp = Component.literal(ClientAdvancementProgress.getInstance().getCompletedAdvancements().get(this.selectedTab.getRootNode().holder().id()) + "/" + ClientAdvancementProgress.getInstance().getTotalAdvancements().get(this.selectedTab.getRootNode().holder().id()));
         graphics.text(this.font, progressComp, xo + WINDOW_WIDTH - this.font.width(progressComp) - 8, yo + 6, -12566464, false);
     }

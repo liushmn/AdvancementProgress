@@ -12,7 +12,10 @@
     "requireAnnotations": true
   },
   "client": [
+    "client.MixinMinecraft",
+    "client.gui.screens.MixinConnectScreen",
     "client.gui.screens.advancements.MixinAdvancementsScreen",
-    "client.multiplayer.MixinClientAdvancements"
+    "client.multiplayer.MixinClientAdvancements",
+    "client.multiplayer.MixinClientPacketListener"
   ]
 }

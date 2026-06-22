@@ -1,5 +1,6 @@
 package de.crafty.advancementprogress;
 
+import de.crafty.advancementprogress.network.ClientboundSayHelloPayload;
 import de.crafty.advancementprogress.network.ClientboundUpdateAdvancementTotalPayload;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
@@ -10,11 +11,13 @@ public class AdvancementProgress implements ModInitializer {
 
     public static final String MOD_ID = "advancementprogress";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+    public static final String MOD_NAME = "AdvancementProgress";
 
     @Override
     public void onInitialize() {
         LOGGER.info("Greetings from AdvancementProgress!");
 
         PayloadTypeRegistry.clientboundPlay().register(ClientboundUpdateAdvancementTotalPayload.TYPE, ClientboundUpdateAdvancementTotalPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(ClientboundSayHelloPayload.TYPE, ClientboundSayHelloPayload.CODEC);
     }
 }

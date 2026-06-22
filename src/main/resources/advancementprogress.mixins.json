@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "package": "de.crafty.advancementprogress.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "server.players.MixinPlayerList"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  },
+  "client": [
+    "client.gui.screens.advancements.MixinAdvancementsScreen",
+    "client.multiplayer.MixinClientAdvancements"
+  ]
+}

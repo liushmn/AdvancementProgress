@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "advancementprogress",
+  "version": "${version}",
+  "name": "${mod_name}",
+  "description": "${mod_desc}",
+  "authors": [
+    "${mod_author}"
+  ],
+  "contact": {
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/advancementprogress/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "de.crafty.advancementprogress.AdvancementProgress"
+    ],
+    "client": [
+      "de.crafty.advancementprogress.ClientAdvancementProgress"
+    ]
+  },
+  "mixins": [
+    "advancementprogress.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "minecraft": "~26.1.2",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}

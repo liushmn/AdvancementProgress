@@ -24,21 +24,24 @@ public abstract class MixinPlayerList {
 
     @Shadow
     @Final
-    private Map<UUID, PlayerAdvancements> advancements;
-
-    @Shadow
-    @Final
     private MinecraftServer server;
 
     @Shadow
     @Final
     private List<ServerPlayer> players;
 
+    /**
+     * Sends the total advancement map to a player after login
+
+     */
     @Inject(method = "placeNewPlayer", at = @At("RETURN"))
     private void updateTotalAdvancements(Connection connection, ServerPlayer player, CommonListenerCookie cookie, CallbackInfo ci) {
         ServerPlayNetworking.send(player, new ClientboundUpdateAdvancementTotalPayload(AdvancementHelper.createTotalMap(this.server)));
     }
 
+    /**
+     * Sends the total advancement map to all players when the server is reloaded
+     */
     @Inject(method = "reloadResources", at = @At("RETURN"))
     private void reloadTotalAdvancements(CallbackInfo ci){
         this.players.forEach(player -> {

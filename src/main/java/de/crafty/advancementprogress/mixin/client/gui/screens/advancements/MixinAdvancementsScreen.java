@@ -32,6 +32,9 @@ public abstract class MixinAdvancementsScreen extends Screen implements ClientAd
     }
 
 
+    /**
+     * Renders the progress in the advancement's screen
+     */
     @Inject(method = "extractWindow", at = @At("RETURN"))
     private void renderProgress(GuiGraphicsExtractor graphics, int xo, int yo, int mouseX, int mouseY, CallbackInfo ci){
         if(this.selectedTab == null) return;

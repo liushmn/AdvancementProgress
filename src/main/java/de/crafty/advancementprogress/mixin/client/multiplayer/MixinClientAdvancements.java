@@ -32,6 +32,9 @@ public abstract class MixinClientAdvancements {
     @Final
     private AdvancementTree tree;
 
+    /**
+     * Updates completed advancements clientside
+     */
     @Inject(method = "update", at = @At("RETURN"))
     private void onUpdate(ClientboundUpdateAdvancementsPacket packet, CallbackInfo ci){
         ClientAdvancementProgress.getInstance().getCompletedAdvancements().clear();

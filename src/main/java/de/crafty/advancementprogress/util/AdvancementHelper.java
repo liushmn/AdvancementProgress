@@ -9,6 +9,9 @@ import java.util.*;
 public class AdvancementHelper {
 
 
+    /**
+     * Creates a map containing all advancement categories with its total amount of advancements
+     */
     public static Map<Identifier, Integer> createTotalMap(MinecraftServer server){
         Map<Identifier, Integer> total = new HashMap<>();
 
@@ -24,6 +27,11 @@ public class AdvancementHelper {
         return total;
     }
 
+    /**
+     * Collects all advancements into a list starting with a given node
+     * @param current
+     * @param list
+     */
     public static void collectAll(AdvancementNode current, List<AdvancementNode> list){
         Iterator<AdvancementNode> iterator = current.children().iterator();
         List<AdvancementNode> children = new ArrayList<>();

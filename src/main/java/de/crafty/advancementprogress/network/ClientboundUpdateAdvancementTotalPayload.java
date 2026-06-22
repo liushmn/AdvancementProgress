@@ -12,6 +12,10 @@ import org.jspecify.annotations.NonNull;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A payload used to inform the client about the total amount of advancements mapped by its category
+ * @param total The map of advancement categories and their total amount of advancements (categoryId is represented by the id of the root element)
+ */
 public record ClientboundUpdateAdvancementTotalPayload(Map<Identifier, Integer> total) implements CustomPacketPayload {
 
     public static final CustomPacketPayload.Type<ClientboundUpdateAdvancementTotalPayload> TYPE = new Type<>(Identifier.fromNamespaceAndPath(AdvancementProgress.MOD_ID, "update_advancement_total"));

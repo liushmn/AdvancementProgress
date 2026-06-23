@@ -41,9 +41,6 @@ public abstract class MixinClientAdvancements {
             List<Advancement> all = new ArrayList<>();
             AdvancementHelper.collectAll(advancement, all);
 
-            System.out.println("Achievements: " + all.size());
-            all.forEach(a -> System.out.println(a.getId() + "/" + this.progress.get(a).isDone()));
-
             int completed = all.stream().filter(node -> this.progress.containsKey(node) && this.progress.get(node).isDone()).toList().size();
             ClientAdvancementProgress.getInstance().getCompletedAdvancements().put(id, completed);
         });

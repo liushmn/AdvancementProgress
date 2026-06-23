@@ -1,21 +1,22 @@
 {
   "required": true,
   "package": "de.crafty.advancementprogress.mixin",
-  "compatibilityLevel": "JAVA_25",
+  "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "server.players.MixinPlayerList"
+    "server.players.MixinPlayerList",
+    "server.players.ServerAdvancementManagerAccessor"
   ],
-  "injectors": {
-    "defaultRequire": 1
-  },
-  "overwrites": {
-    "requireAnnotations": true
-  },
   "client": [
     "client.MixinMinecraft",
     "client.gui.screens.MixinConnectScreen",
     "client.gui.screens.advancements.MixinAdvancementsScreen",
     "client.multiplayer.MixinClientAdvancements",
     "client.multiplayer.MixinClientPacketListener"
-  ]
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
 }

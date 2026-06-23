@@ -1,7 +1,10 @@
 package de.crafty.advancementprogress.util;
 
-import net.minecraft.advancements.AdvancementNode;
-import net.minecraft.resources.Identifier;
+import de.crafty.advancementprogress.mixin.server.players.ServerAdvancementManagerAccessor;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 
 import java.util.*;
@@ -9,17 +12,24 @@ import java.util.*;
 public class AdvancementHelper {
 
 
+    public static FriendlyByteBuf createEncodedTotalMap(MinecraftServer server){
+        FriendlyByteBuf byteBuf = PacketByteBufs.create();
+        Map<ResourceLocation, Integer> total = createTotalMap(server);
+        byteBuf.writeMap(total, FriendlyByteBuf::writeResourceLocation, FriendlyByteBuf::writeInt);
+        return byteBuf;
+    }
+
     /**
      * Creates a map containing all advancement categories with its total amount of advancements
      */
-    public static Map<Identifier, Integer> createTotalMap(MinecraftServer server){
-        Map<Identifier, Integer> total = new HashMap<>();
+    public static Map<ResourceLocation, Integer> createTotalMap(MinecraftServer server){
+        Map<ResourceLocation, Integer> total = new HashMap<>();
 
-        server.getAdvancements().tree().roots().forEach(advancementNode -> {
-            Identifier id = advancementNode.holder().id();
+        ((ServerAdvancementManagerAccessor)server.getAdvancements()).advancementList().getRoots().forEach(advancement -> {
+            ResourceLocation id = advancement.getId();
 
-            List<AdvancementNode> all = new ArrayList<>();
-            AdvancementHelper.collectAll(advancementNode, all);
+            List<Advancement> all = new ArrayList<>();
+            AdvancementHelper.collectAll(advancement, all);
             if(!all.isEmpty())
                 total.put(id, all.size());
 
@@ -32,12 +42,12 @@ public class AdvancementHelper {
      * @param current
      * @param list
      */
-    public static void collectAll(AdvancementNode current, List<AdvancementNode> list){
-        Iterator<AdvancementNode> iterator = current.children().iterator();
-        List<AdvancementNode> children = new ArrayList<>();
+    public static void collectAll(Advancement current, List<Advancement> list){
+        Iterator<Advancement> iterator = current.getChildren().iterator();
+        List<Advancement> children = new ArrayList<>();
         while (iterator.hasNext()){
-            AdvancementNode child = iterator.next();
-            if(child.advancement().display().isPresent())
+            Advancement child = iterator.next();
+            if(child.getDisplay() != null)
                 children.add(child);
         }
         list.addAll(children);

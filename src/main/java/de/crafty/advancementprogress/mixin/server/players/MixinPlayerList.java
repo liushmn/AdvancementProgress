@@ -1,13 +1,12 @@
 package de.crafty.advancementprogress.mixin.server.players;
 
-import de.crafty.advancementprogress.network.ClientboundSayHelloPayload;
-import de.crafty.advancementprogress.network.ClientboundUpdateAdvancementTotalPayload;
+import de.crafty.advancementprogress.AdvancementProgress;
 import de.crafty.advancementprogress.util.AdvancementHelper;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.Connection;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.players.PlayerList;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -35,9 +34,9 @@ public abstract class MixinPlayerList {
 
      */
     @Inject(method = "placeNewPlayer", at = @At("RETURN"))
-    private void updateTotalAdvancements(Connection connection, ServerPlayer player, CommonListenerCookie cookie, CallbackInfo ci) {
-        ServerPlayNetworking.send(player, new ClientboundSayHelloPayload());
-        ServerPlayNetworking.send(player, new ClientboundUpdateAdvancementTotalPayload(AdvancementHelper.createTotalMap(this.server)));
+    private void updateTotalAdvancements(Connection connection, ServerPlayer serverPlayer, CallbackInfo ci) {
+        ServerPlayNetworking.send(serverPlayer, AdvancementProgress.SAY_HELLO_PACKET_ID, PacketByteBufs.create());
+        ServerPlayNetworking.send(serverPlayer, AdvancementProgress.TOTAL_ADVANCEMENTS_PACKET_ID, AdvancementHelper.createEncodedTotalMap(this.server));
     }
 
     /**
@@ -46,7 +45,7 @@ public abstract class MixinPlayerList {
     @Inject(method = "reloadResources", at = @At("RETURN"))
     private void reloadTotalAdvancements(CallbackInfo ci){
         this.players.forEach(player -> {
-            ServerPlayNetworking.send(player, new ClientboundUpdateAdvancementTotalPayload(AdvancementHelper.createTotalMap(this.server)));
+            ServerPlayNetworking.send(player, AdvancementProgress.TOTAL_ADVANCEMENTS_PACKET_ID, AdvancementHelper.createEncodedTotalMap(this.server));
         });
     }
 

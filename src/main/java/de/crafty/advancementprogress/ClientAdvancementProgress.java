@@ -1,10 +1,9 @@
 package de.crafty.advancementprogress;
 
-import de.crafty.advancementprogress.network.ClientboundSayHelloPayload;
-import de.crafty.advancementprogress.network.ClientboundUpdateAdvancementTotalPayload;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.resources.Identifier;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,28 +18,28 @@ public class ClientAdvancementProgress implements ClientModInitializer {
     private boolean installedOnServer = false;
     private long lastConnected = Long.MAX_VALUE;
 
-    private final Map<Identifier, Integer> totalAdvancements = new HashMap<>();
-    private final Map<Identifier, Integer> completedAdvancements = new HashMap<>();
+    private final Map<ResourceLocation, Integer> totalAdvancements = new HashMap<>();
+    private final Map<ResourceLocation, Integer> completedAdvancements = new HashMap<>();
 
     @Override
     public void onInitializeClient() {
         instance = this;
 
-        ClientPlayNetworking.registerGlobalReceiver(ClientboundUpdateAdvancementTotalPayload.TYPE, (payload, context) -> {
+        ClientPlayNetworking.registerGlobalReceiver(AdvancementProgress.TOTAL_ADVANCEMENTS_PACKET_ID, (client, handler, buf, responseSender) -> {
             this.totalAdvancements.clear();
-            this.totalAdvancements.putAll(payload.total());
+            this.totalAdvancements.putAll(buf.readMap(FriendlyByteBuf::readResourceLocation, FriendlyByteBuf::readInt));
         });
 
-        ClientPlayNetworking.registerGlobalReceiver(ClientboundSayHelloPayload.TYPE, (payload, context) -> {
+        ClientPlayNetworking.registerGlobalReceiver(AdvancementProgress.SAY_HELLO_PACKET_ID, (client, handler, buf, responseSender) ->  {
             this.installedOnServer = true;
         });
     }
 
-    public Map<Identifier, Integer> getTotalAdvancements() {
+    public Map<ResourceLocation, Integer> getTotalAdvancements() {
         return this.totalAdvancements;
     }
 
-    public Map<Identifier, Integer> getCompletedAdvancements() {
+    public Map<ResourceLocation, Integer> getCompletedAdvancements() {
         return this.completedAdvancements;
     }
 

@@ -27,6 +27,12 @@ public abstract class MixinAdvancementsScreen extends Screen implements ClientAd
     @Final
     public static int WINDOW_WIDTH;
 
+    @Shadow
+    private int leftPos;
+
+    @Shadow
+    private int topPos;
+
     protected MixinAdvancementsScreen(Component title) {
         super(title);
     }
@@ -36,12 +42,12 @@ public abstract class MixinAdvancementsScreen extends Screen implements ClientAd
      * Renders the progress in the advancement's screen
      */
     @Inject(method = "extractWindow", at = @At("RETURN"))
-    private void renderProgress(GuiGraphicsExtractor graphics, int xo, int yo, int mouseX, int mouseY, CallbackInfo ci){
+    private void renderProgress(GuiGraphicsExtractor graphics, int mouseX, int mouseY, CallbackInfo ci){
         if(this.selectedTab == null) return;
 
         if(ClientAdvancementProgress.getInstance().getTotalAdvancements().isEmpty()) return;
 
         Component progressComp = Component.literal(ClientAdvancementProgress.getInstance().getCompletedAdvancements().get(this.selectedTab.getRootNode().holder().id()) + "/" + ClientAdvancementProgress.getInstance().getTotalAdvancements().get(this.selectedTab.getRootNode().holder().id()));
-        graphics.text(this.font, progressComp, xo + WINDOW_WIDTH - this.font.width(progressComp) - 8, yo + 6, -12566464, false);
+        graphics.text(this.font, progressComp, this.leftPos + WINDOW_WIDTH - this.font.width(progressComp) - 8, this.topPos + 6, -12566464, false);
     }
 }

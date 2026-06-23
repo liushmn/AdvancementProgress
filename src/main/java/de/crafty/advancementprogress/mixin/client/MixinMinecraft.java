@@ -28,7 +28,7 @@ public abstract class MixinMinecraft {
     @Inject(method = "tick", at = @At("RETURN"))
     private void checkForInstallation(CallbackInfo ci){
         if(System.currentTimeMillis() - ClientAdvancementProgress.getInstance().getLastConnected() > 5000L && !ClientAdvancementProgress.getInstance().isInstalledOnServer()){
-            this.gui.getChat().addClientSystemMessage(
+            this.gui.hud.getChat().addClientSystemMessage(
                     (Component.literal("[").withStyle(ChatFormatting.GRAY))
                             .append(Component.literal(AdvancementProgress.MOD_NAME).withStyle(ChatFormatting.GOLD))
                             .append(Component.literal("] ").withStyle(ChatFormatting.GRAY))
